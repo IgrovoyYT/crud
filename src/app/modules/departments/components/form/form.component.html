@@ -1,0 +1,13 @@
+<form [formGroup]="form">
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Name</mat-label>
+    <input required type="text" matInput formControlName="name"
+           placeholder="Enter name">
+  </mat-form-field>
+  <mat-form-field class="form-field" appearance="fill">
+    <mat-label>Description</mat-label>
+    <input required type="text" matInput formControlName="description"
+           placeholder="Enter description">
+  </mat-form-field>
+  <button mat-flat-button (click)="save()">Save</button>
+</form>

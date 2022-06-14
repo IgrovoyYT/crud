@@ -1,0 +1,12 @@
+<div class="wrap">
+  <p>Name: {{department.name}}</p>
+  <p>Description: {{department.description}}</p>
+
+  <p>Current Employees</p>
+  <ng-container *ngFor="let object of employees">
+    <p>Name: {{object.name}}</p>
+  </ng-container>
+
+  <a [routerLink]="['../', 'edit']">Edit</a>
+</div>
+

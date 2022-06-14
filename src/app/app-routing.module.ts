@@ -1,19 +1,20 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {DepartmentsModule} from "./departments/departments.module";
-import {EmployeesModule} from "./employees/employees.module";
+import {DepartmentsModule} from "./modules/departments/departments.module";
+import {EmployeesModule} from "./modules/employees/employees.module";
+import {DepartmentsResolve} from "./modules/departments/resolvers/departments.resolve";
 
 const routes: Routes = [
   {
     path: 'department',
-    loadChildren: () => import('./departments/departments.module').then(m => m.DepartmentsModule)
+    loadChildren: () => import('./modules/departments/departments.module').then(m => m.DepartmentsModule),
   },
   {
     path: 'employee',
-    loadChildren: () => import('./employees/employees.module').then(m => m.EmployeesModule)
+    loadChildren: () => import('./modules/employees/employees.module').then(m => m.EmployeesModule)
   },
   {
-    path: '**',
+    path: '',
     redirectTo: 'department',
     pathMatch: 'full'
   }

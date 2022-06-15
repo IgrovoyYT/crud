@@ -9,15 +9,21 @@
     <span>Description:</span>
     <span>{{department.description}}</span>
   </div>
+  <ng-container *ngIf="employees?.length">
   <p class="fw-bold text-center my-2 head">Current Employees</p>
   <ng-container *ngFor="let object of employees">
     <div class="text-between mt-1">
       <span>Name:</span>
-      <span class="pointer color-accent fw-bold">{{object.name}}</span>
+      <a [routerLink]="['/employees', object.id, 'view']" [queryParams]="{departmentId: department.id}" class="pointer color-accent fw-bold">{{object.name}}</a>
+    </div>
+  </ng-container>
+    <div class="mt-1">
+  <a class="color-accent fw-bold" routerLink="/employees" [queryParams]="{departmentId: department.id}">All Employees</a>
     </div>
   </ng-container>
   <div class="text-center my-2">
-  <button mat-flat-button color="accent" [routerLink]="['../', 'edit']">Edit</button>
+  <a mat-flat-button color="accent" [routerLink]="['../', 'edit']">Edit</a>
+    <button class="ml-2" mat-flat-button color="primary" (click)="delete()">Delete</button>
   </div>
 </div>
 </div>

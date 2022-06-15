@@ -1,19 +1,16 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
+
 import {DepartmentsComponent} from "./components/departments.component";
-import {DepartmentsResolve} from "./resolvers/departments.resolve";
 import {FormComponent} from "./components/form/form.component";
 import {DetailsComponent} from "./components/details/details.component";
 import {DepartmentByIdResolve} from "./resolvers/department-by-id.resolve";
-import {EmployeesByIdResolve} from "./resolvers/employees-by-id.resolve";
+import {EmployeesResolve} from "../employees/resolvers/employees.resolve";
 
 const routes: Routes = [
   {
     path: '',
-    component: DepartmentsComponent,
-    resolve: {
-      departments: DepartmentsResolve
-    }
+    component: DepartmentsComponent
   },
   {
     path: 'create',
@@ -23,7 +20,7 @@ const routes: Routes = [
     path: ':id',
     resolve: {
       department: DepartmentByIdResolve,
-      currentEmployees: EmployeesByIdResolve
+      currentEmployees: EmployeesResolve
     },
     children: [
       {

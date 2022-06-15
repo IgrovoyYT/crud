@@ -7,15 +7,14 @@ import {EmployeesService} from "../services/employees.service";
 
 @Injectable()
 
-export class EmployeesResolve implements Resolve<Observable<Employee[]>> {
+export class EmployeeByIdResolve implements Resolve<Observable<Employee>> {
+ constructor(private employeesService: EmployeesService) {
+ }
 
-  constructor(private employeesService: EmployeesService) {
-  }
+  resolve(route: ActivatedRouteSnapshot): Observable<Employee> {
 
-  resolve(route: ActivatedRouteSnapshot): Observable<Employee[]> {
-    const params = route.queryParams
-
-    return this.employeesService.get(params);
+   const id = route.params["id"]
+    return this.employeesService.getById(id);
   }
 
 }

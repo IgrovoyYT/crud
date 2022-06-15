@@ -1,21 +1,25 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
+
 import {Department} from "../interfaces/departments.interface";
-import {Employee} from "../../employees/interfaces/employees.interface";
+import {EntityInterface} from "../../../shared/interfaces/entity.interface";
 
-@Injectable()
 
-export class DepartmentsService {
+@Injectable({
+  providedIn: 'root'
+})
+
+export class DepartmentsService implements EntityInterface<Department>{
 
   urlDepartments: string = 'api/departments/'
-  urlEmployees: string = 'api/employees/'
-
 
   constructor(private http: HttpClient) {}
 
-  get(): Observable<Department[]> {
-    return this.http.get<Department[]>(this.urlDepartments)
+  get(params: any): Observable<Department[]> {
+    return this.http.get<Department[]>(this.urlDepartments, {
+      params
+    })
   }
 
   create(department: Department): Observable<Department> {
@@ -32,14 +36,6 @@ export class DepartmentsService {
 
   delete(id: number): Observable<Department> {
     return this.http.delete<Department>(this.urlDepartments + id)
-  }
-
-  getEmployeesById(id: number): Observable<Employee[]> {
-    return this.http.get<Employee[]>(this.urlEmployees, {
-      params: {
-        departmentId: id
-      }
-    })
   }
 
 }

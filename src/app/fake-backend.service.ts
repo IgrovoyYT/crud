@@ -1,45 +1,24 @@
 import {InMemoryDbService} from "angular-in-memory-web-api";
 import {Injectable} from "@angular/core";
+
 import {Department} from "./modules/departments/interfaces/departments.interface";
 import {Employee} from "./modules/employees/interfaces/employees.interface";
 
-@Injectable(
-  { providedIn: 'root' }
-)
+@Injectable({
+  providedIn: 'root'
+})
 
 export class FakeBackendService implements InMemoryDbService {
   createDb() {
     const departments: Department[] = [
-      {
-        id: 1,
-        name: 'Бухгалтерия',
-        description: 'Buy Groceries'
-      },
-      {
-        id: 2,
-        name: 'Отдел кадров',
-        description: 'Paint the garage'
-      }
+      {id: 1, name: 'Office', description: 'Office description'},
+      {id: 2, name: 'Guard', description: 'Guard description'},
+      {id: 3, name: 'Accounting', description: 'Accounting description'}
     ]
     const employees: Employee[] = [
-      {
-        id: 1,
-        departmentId: 1,
-        name: 'Максим',
-        description: ''
-      },
-      {
-        id: 2,
-        departmentId: 1,
-        name: 'Микита',
-        description: 'Paint the garage'
-      },
-      {
-        id: 3,
-        departmentId: 2,
-        name: 'Ілля',
-        description: 'Paint the garage'
-      }
+      {id: 1, departmentId: 1, name: 'Maxim', description: 'Maxim description'},
+      {id: 2, departmentId: 1, name: 'Nikita', description: 'Mykyta description'},
+      {id: 3, departmentId: 2, name: 'Ilya', description: 'Ilya description'}
     ]
 
     return {departments, employees};

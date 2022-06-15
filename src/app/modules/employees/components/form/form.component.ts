@@ -1,12 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {takeUntil} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {expand, of, takeUntil, takeWhile, filter, pluck} from "rxjs";
 
-import {Department, DepartmentClass} from "../../interfaces/departments.interface";
-import {DepartmentsService} from "../../services/departments.service";
 import {UnsubscriberComponent} from "../../../../shared/helpers/unsubscriber.component";
+import {Department} from "../../../departments/interfaces/departments.interface";
+import {EmployeesService} from "../../services/employees.service";
+import {Employee, EmployeeClass} from "../../interfaces/employees.interface";
 
 @Component({
   selector: 'app-form',
@@ -17,9 +18,11 @@ export class FormComponent extends UnsubscriberComponent implements OnInit {
 
   // @ts-ignore
   form: FormGroup
+  // @ts-ignore
+  departments: Department[]
 
   constructor(
-    private departmentsService: DepartmentsService,
+    private employeesService: EmployeesService,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -33,7 +36,7 @@ export class FormComponent extends UnsubscriberComponent implements OnInit {
   }
 
   create(): void {
-    this.departmentsService.create(this.form.value)
+    this.employeesService.create(this.form.value)
       .pipe(takeUntil(this.$destroy))
       .subscribe({
         complete: () => {
@@ -44,7 +47,7 @@ export class FormComponent extends UnsubscriberComponent implements OnInit {
   }
 
   update(id: number): void {
-    this.departmentsService.update(id, this.form.value)
+    this.employeesService.update(id, this.form.value)
       .pipe(takeUntil(this.$destroy))
       .subscribe({
         complete: () => {
@@ -64,19 +67,33 @@ export class FormComponent extends UnsubscriberComponent implements OnInit {
   }
 
   get(): void {
-    this.route.data
-      .pipe(takeUntil(this.$destroy))
+    of(this.route)
+      .pipe(takeUntil(this.$destroy),
+        expand(route => of(route?.['parent'])),
+        takeWhile(route => !!route?.parent),
+        pluck('snapshot', 'data'),
+        filter((item: any) => !!item?.employee || !!item?.departments),
+      )
       .subscribe({
-        next: (value: any) => this.initForm(value.department)
+        next: (value: any) => {
+          if (value.departments) {
+            this.departments = value.departments
+          }
+          if (!this.form?.value) {
+            this.initForm(value['employee'])
+          }
+        }
       })
   }
 
   navigateTo(): void {
-    this.router.navigate(['../'])
+    this.router.navigate(['/employees'], {
+      queryParamsHandling: "merge"
+    })
   }
 
-  initForm(department: Department = new DepartmentClass()): void {
-    this.form = this.fb.group(department)
+  initForm(employee: Employee = new EmployeeClass()): void {
+    this.form = this.fb.group(employee)
   }
 
   openSnackBar(message: string): void {

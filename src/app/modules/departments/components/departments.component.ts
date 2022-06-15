@@ -1,46 +1,55 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
+import {MatPaginator} from '@angular/material/paginator';
 import {ActivatedRoute} from "@angular/router";
+import {MatTableDataSource} from "@angular/material/table";
+import {MatSort} from "@angular/material/sort";
+import {takeUntil} from "rxjs";
+
 import {Department} from "../interfaces/departments.interface";
-import {DepartmentsService} from "../services/departments.service";
+import {UnsubscriberComponent} from "../../../shared/helpers/unsubscriber.component";
 
 @Component({
   selector: 'app-departments',
   templateUrl: './departments.component.html',
   styleUrls: ['./departments.component.less']
 })
-export class DepartmentsComponent implements OnInit {
+export class DepartmentsComponent extends UnsubscriberComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'description'];
-  dataSource: Department[] = [];
+  dataSource: MatTableDataSource<Department[]> = new MatTableDataSource<Department[]>()
 
-  // @ts-ignore
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
   constructor(
     private route: ActivatedRoute,
-    private DepartmentsService: DepartmentsService
-              ) { }
+  ) {
+    super()
+  }
 
   ngOnInit(): void {
     this.get()
   }
 
   get(): void {
-    this.route.data.subscribe({
-      next: (value:any) => this.dataSource = value.departments
-    })
+    this.route.parent?.parent?.data
+      .pipe(takeUntil(this.$destroy))
+      .subscribe({
+        next: (value: any) => this.dataSource = new MatTableDataSource<Department[]>(value.departments)
+      })
   }
 
-  getById(): void {
-    this.DepartmentsService.getById(1).subscribe({
-      next: value => console.log(value)
-    })
+  ngAfterViewInit(): void {
+    this.initPagination()
+    this.initSort()
   }
 
-  ngAfterViewInit() {
-    // @ts-ignore
+  initPagination(): void {
     this.dataSource.paginator = this.paginator;
+  }
+
+  initSort(): void {
+    this.dataSource.sort = this.sort;
   }
 
 }

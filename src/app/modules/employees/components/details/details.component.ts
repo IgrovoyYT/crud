@@ -1,32 +1,30 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {takeUntil} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {takeUntil} from "rxjs";
 
-import {Department} from "../../interfaces/departments.interface";
-import {Employee} from "../../../employees/interfaces/employees.interface";
 import {UnsubscriberComponent} from "../../../../shared/helpers/unsubscriber.component";
-import {DepartmentsService} from "../../services/departments.service";
+import {Department} from "../../../departments/interfaces/departments.interface";
+import {Employee} from "../../interfaces/employees.interface";
+import {EmployeesService} from "../../services/employees.service";
 
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
   styleUrls: ['./details.component.less']
 })
-
 export class DetailsComponent extends UnsubscriberComponent implements OnInit {
 
   // @ts-ignore
-  department: Department
+  employee: Employee
   // @ts-ignore
-  employees: Employee[]
+  department: Department
 
   constructor(
     private route: ActivatedRoute,
+    private employeesService: EmployeesService,
     private router: Router,
-    private departmentsService: DepartmentsService,
-    private _snackBar: MatSnackBar
-  ) {
+    private _snackBar: MatSnackBar) {
     super()
   }
 
@@ -35,20 +33,21 @@ export class DetailsComponent extends UnsubscriberComponent implements OnInit {
   }
 
   get(): void {
-    this.route.data.pipe(takeUntil(this.$destroy))
+    this.route.data
+      .pipe(takeUntil(this.$destroy))
       .subscribe({
         next: (value: any) => {
-          this.department = value.department
-          this.employees = value.currentEmployees || []
+          this.employee = value.employee
+          this.department = value.currentDepartment
         }
       })
   }
 
   delete(): void {
-    this.departmentsService.delete(this.department.id as number)
+    this.employeesService.delete(this.employee.id as number)
       .pipe(takeUntil(this.$destroy))
       .subscribe({
-        next: () => {
+        complete: () => {
           this.navigateTo()
           this.openSnackBar('Removed!')
         }
@@ -56,7 +55,7 @@ export class DetailsComponent extends UnsubscriberComponent implements OnInit {
   }
 
   navigateTo(): void {
-    this.router.navigate(['/departments'])
+    this.router.navigate(['/employees'])
   }
 
   openSnackBar(message: string): void {

@@ -1,0 +1,24 @@
+<div class="div-align-center">
+  <div class="wrap">
+    <p class="fw-bold text-center my-2 head">Current  Employee</p>
+    <div class="text-between">
+      <span>Name:</span>
+      <span>{{employee.name}}</span>
+    </div>
+    <div class="text-between mt-1">
+      <span>Description:</span>
+      <span>{{employee.description}}</span>
+    </div>
+    <ng-container *ngIf="department">
+    <p class="fw-bold text-center my-2 head">Current Department</p>
+      <div class="text-between mt-1">
+        <span>Name:</span>
+        <a [routerLink]="['/departments', department.id, 'view']" queryParamsHandling="merge" class="pointer color-accent fw-bold">{{department.name}}</a>
+      </div>
+    </ng-container>
+    <div class="text-center my-2">
+      <a mat-flat-button color="accent" [routerLink]="['../', 'edit']">Edit</a>
+      <button  class="ml-2"  mat-flat-button color="primary" (click)="delete()">Delete</button>
+    </div>
+  </div>
+</div>

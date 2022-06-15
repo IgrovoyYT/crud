@@ -1,36 +1,40 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import {DepartmentsModule} from "./modules/departments/departments.module";
-import {EmployeesModule} from "./modules/employees/employees.module";
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderComponent } from './modules/header/header.component';
+import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatButtonModule} from "@angular/material/button";
 import {MatToolbarModule} from "@angular/material/toolbar";
-import {DepartmentsService} from "./modules/departments/services/departments.service";
+import {HttpClientModule} from "@angular/common/http";
+import {MatSnackBarModule} from "@angular/material/snack-bar";
+
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {HeaderComponent} from './modules/header/header.component';
 import {InMemoryWebApiModule} from "angular-in-memory-web-api";
 import {FakeBackendService} from "./fake-backend.service";
-import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {UnsubscriberComponent} from "./shared/helpers/unsubscriber.component";
+import {DepartmentsResolve} from "./modules/departments/resolvers/departments.resolve";
+import {EmployeesResolve} from "./modules/employees/resolvers/employees.resolve";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent
+    HeaderComponent,
+    UnsubscriberComponent
   ],
   imports: [
-    DepartmentsModule,
     HttpClientModule,
-    EmployeesModule,
     AppRoutingModule,
     BrowserModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatToolbarModule,
+    MatSnackBarModule,
     InMemoryWebApiModule.forRoot(FakeBackendService)
   ],
-  providers: [],
+  providers: [
+    DepartmentsResolve,
+    EmployeesResolve],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

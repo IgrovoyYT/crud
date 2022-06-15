@@ -1,3 +1,4 @@
+<div class="div-align-center my-2">
 <form [formGroup]="form">
   <mat-form-field class="form-field" appearance="fill">
     <mat-label>Name</mat-label>
@@ -9,5 +10,8 @@
     <input required type="text" matInput formControlName="description"
            placeholder="Enter description">
   </mat-form-field>
-  <button mat-flat-button (click)="save()">Save</button>
+  <div class="text-center">
+  <button  mat-flat-button (click)="save()" [disabled]="form.invalid" color="accent">Save</button>
+  </div>
 </form>
+</div>

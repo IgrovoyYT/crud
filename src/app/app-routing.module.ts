@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {DepartmentsModule} from "./modules/departments/departments.module";
 import {EmployeesModule} from "./modules/employees/employees.module";
-import {DepartmentsResolve} from "./modules/departments/resolvers/departments.resolve";
 
 const routes: Routes = [
   {

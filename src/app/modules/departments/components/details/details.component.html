@@ -1,12 +1,23 @@
+<div class="div-align-center">
 <div class="wrap">
-  <p>Name: {{department.name}}</p>
-  <p>Description: {{department.description}}</p>
-
-  <p>Current Employees</p>
+  <p class="fw-bold text-center my-2 head">Current Department</p>
+  <div class="text-between">
+    <span>Name:</span>
+    <span>{{department.name}}</span>
+  </div>
+  <div class="text-between mt-1">
+    <span>Description:</span>
+    <span>{{department.description}}</span>
+  </div>
+  <p class="fw-bold text-center my-2 head">Current Employees</p>
   <ng-container *ngFor="let object of employees">
-    <p>Name: {{object.name}}</p>
+    <div class="text-between mt-1">
+      <span>Name:</span>
+      <span class="pointer color-accent fw-bold">{{object.name}}</span>
+    </div>
   </ng-container>
-
-  <a [routerLink]="['../', 'edit']">Edit</a>
+  <div class="text-center my-2">
+  <button mat-flat-button color="accent" [routerLink]="['../', 'edit']">Edit</button>
+  </div>
 </div>
-
+</div>
